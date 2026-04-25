@@ -1,34 +1,34 @@
 """
-transport.py  –  Transportation Problem Solver
-Algorithms: North-West Corner, Balas-Hammer, Stepping-Stone with Potentials (MODI)
+transport.py  –  Solveur de Problèmes de Transport
+Algorithmes : Coin Nord-Ouest, Balas-Hammer, Stepping-Stone avec Potentiels (MODI)
 """
 
 from collections import defaultdict, deque
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Data structure
+# Structure de données
 # ══════════════════════════════════════════════════════════════════════════════
 
 class TransportProblem:
-    """Balanced transportation problem: n suppliers × m clients."""
+    """Problème de transport équilibré : n fournisseurs × m clients."""
 
     def __init__(self, n, m, costs, supply, demand):
-        self.n = n           # number of suppliers (rows)
-        self.m = m           # number of clients   (columns)
-        self.costs  = costs  # list[n][m]  – unit transport costs
+        self.n = n           # nombre de fournisseurs (lignes)
+        self.m = m           # nombre de clients   (colonnes)
+        self.costs  = costs  # list[n][m]  – coûts unitaires de transport
         self.supply = supply # list[n]     – provisions Pi
         self.demand = demand # list[m]     – commandes Cj
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# File I/O
+# Lecture/écriture de fichiers
 # ══════════════════════════════════════════════════════════════════════════════
 
 def read_problem(filepath):
-    """Read a transport problem from a .txt file.
+    """Lit un problème de transport depuis un fichier .txt.
 
-    File format:
+    Format du fichier :
         n m
         a11 a12 … a1m  P1
         …
@@ -51,18 +51,18 @@ def read_problem(filepath):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Display helpers
+# Fonctions d'affichage
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _col_w(values, min_w=3):
-    """Minimum column width that fits every value (plus 1 space padding)."""
+    """Largeur minimale de colonne pour contenir toutes les valeurs (+ 1 espace de marge)."""
     if not values:
         return min_w + 1
     return max(min_w, max(len(str(v)) for v in values if v is not None)) + 1
 
 
 def display_cost_matrix(problem):
-    """Return a nicely formatted string of the cost matrix."""
+    """Retourne la matrice des coûts sous forme de chaîne formatée."""
     n, m = problem.n, problem.m
     flat = (list(problem.supply) + list(problem.demand)
             + [c for row in problem.costs for c in row])
@@ -84,7 +84,7 @@ def display_cost_matrix(problem):
 
 def display_allocation_table(problem, allocation, basic_cells,
                               title="PROPOSITION DE TRANSPORT"):
-    """Return a formatted allocation table (basic cells shown, others blank)."""
+    """Retourne le tableau d'allocation formaté (cellules de base affichées, autres vides)."""
     n, m = problem.n, problem.m
     vals = [allocation[i][j] for (i, j) in basic_cells if allocation[i][j] is not None]
     w  = _col_w(list(problem.supply) + list(problem.demand) + vals)
@@ -113,7 +113,7 @@ def display_allocation_table(problem, allocation, basic_cells,
 
 
 def display_potential_table(problem, basic_cells, u, v):
-    """Return the potential-cost table  (ui + vj)."""
+    """Retourne le tableau des coûts potentiels (ui + vj)."""
     n, m = problem.n, problem.m
     pot = [[u[i] + v[j] if (u[i] is not None and v[j] is not None) else None
             for j in range(m)] for i in range(n)]
@@ -121,7 +121,7 @@ def display_potential_table(problem, basic_cells, u, v):
             if x is not None]
     w = _col_w(flat)
 
-    # Build column headers:  "C1(v)"
+    # Construction des en-têtes de colonnes : "C1(v)"
     col_hdrs = [f"C{j+1}({'?' if v[j] is None else v[j]})" for j in range(m)]
     lw = max(_col_w([f"P{n}(u)", "ui\\vj"] + col_hdrs), w)
 
@@ -147,8 +147,8 @@ def display_potential_table(problem, basic_cells, u, v):
 
 
 def display_marginal_table(problem, basic_cells, marginal, improving_edge=None):
-    """Return the marginal-cost table  (aij − ui − vj).
-    Basic cells show '---'; the best improving edge is bracketed if provided."""
+    """Retourne le tableau des coûts marginaux (aij − ui − vj).
+    Les cellules de base affichent '---' ; la meilleure arête améliorante est entre crochets si fournie."""
     n, m = problem.n, problem.m
     flat = [marginal[i][j] for i in range(n) for j in range(m)
             if marginal[i][j] is not None]
@@ -176,11 +176,11 @@ def display_marginal_table(problem, basic_cells, marginal, improving_edge=None):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Cost calculation
+# Calcul du coût
 # ══════════════════════════════════════════════════════════════════════════════
 
 def compute_total_cost(problem, allocation):
-    """Sum of  aij × bij  for all basic cells with positive allocation."""
+    """Somme de aij × bij pour toutes les cellules de base avec allocation positive."""
     total = 0
     for i in range(problem.n):
         for j in range(problem.m):
@@ -191,12 +191,12 @@ def compute_total_cost(problem, allocation):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Initial proposals
+# Propositions initiales
 # ══════════════════════════════════════════════════════════════════════════════
 
 def north_west(problem):
-    """North-West Corner method.
-    Returns (allocation, basic_cells, log_lines)."""
+    """Méthode du coin Nord-Ouest.
+    Retourne (allocation, cellules_de_base, lignes_de_log)."""
     n, m   = problem.n, problem.m
     supply = list(problem.supply)
     demand = list(problem.demand)
@@ -229,8 +229,8 @@ def north_west(problem):
 
 
 def balas_hammer(problem):
-    """Balas-Hammer method.
-    Returns (allocation, basic_cells, log_lines)."""
+    """Méthode de Balas-Hammer.
+    Retourne (allocation, cellules_de_base, lignes_de_log)."""
     n, m       = problem.n, problem.m
     supply     = list(problem.supply)
     demand     = list(problem.demand)
@@ -247,7 +247,7 @@ def balas_hammer(problem):
         if not ar or not ac:
             break
 
-        # Penalties
+        # Pénalités
         rp = {}
         for i in ar:
             c = sorted(problem.costs[i][j] for j in ac)
@@ -316,12 +316,12 @@ def _log_degeneracy(log, basic, n, m):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Graph algorithms (BFS)
+# Algorithmes de graphe (BFS)
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _adj(basic_cells, n):
-    """Adjacency list for the bipartite graph.
-    Row i  ↔  node i ;  Column j  ↔  node n+j."""
+    """Liste d'adjacence pour le graphe biparti.
+    Ligne i  ↔  nœud i ;  Colonne j  ↔  nœud n+j."""
     g = defaultdict(list)
     for (i, j) in basic_cells:
         g[i].append(n + j)
@@ -330,10 +330,10 @@ def _adj(basic_cells, n):
 
 
 def detect_cycle_bfs(basic_cells, n, m):
-    """Detect a cycle using BFS on the bipartite graph.
-    Returns a list of (row, col) cells forming the cycle, or None."""
+    """Détecte un cycle par BFS sur le graphe biparti.
+    Retourne une liste de cellules (ligne, col) formant le cycle, ou None."""
     g      = _adj(basic_cells, n)
-    parent = {}   # node → parent  (None for BFS root)
+    parent = {}   # nœud → parent  (None pour la racine BFS)
 
     for start in range(n + m):
         if start in parent:
@@ -348,8 +348,8 @@ def detect_cycle_bfs(basic_cells, n, m):
                     parent[v] = u
                     queue.append(v)
                 elif parent[u] != v:
-                    # Back-edge  u — v  found → reconstruct the cycle
-                    # 1. Ancestor chains
+                    # Arc arrière u — v trouvé → reconstruction du cycle
+                    # 1. Chaînes d'ancêtres
                     def chain(x):
                         c = []
                         while x is not None:
@@ -360,7 +360,7 @@ def detect_cycle_bfs(basic_cells, n, m):
                     set_u    = set(cu)
                     lca      = next(x for x in cv if x in set_u)
 
-                    # 2. Path  lca → … → u
+                    # 2. Chemin lca → … → u
                     pu = []
                     x  = u
                     while x != lca:
@@ -368,12 +368,12 @@ def detect_cycle_bfs(basic_cells, n, m):
                     pu.append(lca)
                     pu.reverse()          # [lca, …, u]
 
-                    # 3. Path  v → … → child-of-lca
+                    # 3. Chemin v → … → enfant-du-lca
                     pv = []
                     x  = v
                     while x != lca:
                         pv.append(x); x = parent[x]
-                    # pv = [v, …, first node after lca]
+                    # pv = [v, …, premier nœud après lca]
 
                     cycle_nodes = pu + pv
                     L           = len(cycle_nodes)
@@ -386,9 +386,9 @@ def detect_cycle_bfs(basic_cells, n, m):
 
 
 def maximize_on_cycle(allocation, basic_cells, cycle_cells):
-    """Apply the stepping-stone maximisation on *cycle_cells*.
-    cycle_cells[0] is the entering edge (+); alternating signs follow.
-    Returns (new_alloc, new_basic, removed_cells, delta)."""
+    """Applique la maximisation par stepping-stone sur *cycle_cells*.
+    cycle_cells[0] est l'arête entrante (+) ; les signes alternent ensuite.
+    Retourne (nouvel_alloc, nouvelle_base, cellules_retirées, delta)."""
     alloc  = [row[:] for row in allocation]
     basic  = set(basic_cells)
 
@@ -403,7 +403,7 @@ def maximize_on_cycle(allocation, basic_cells, cycle_cells):
     for (i, j) in minus_c:
         alloc[i][j] = (alloc[i][j] or 0) - delta
 
-    # Remove exactly one leaving arc (the last minus cell at 0)
+    # Retirer exactement une arête sortante (la dernière cellule moins à 0)
     zeros   = [(i, j) for (i, j) in minus_c if alloc[i][j] == 0]
     removed = []
     if zeros:
@@ -416,7 +416,7 @@ def maximize_on_cycle(allocation, basic_cells, cycle_cells):
 
 
 def check_connectivity_bfs(basic_cells, n, m):
-    """Return (is_connected, list_of_component_sets) using BFS."""
+    """Retourne (est_connexe, liste_de_composantes) par BFS."""
     g       = _adj(basic_cells, n)
     visited = set()
     comps   = []
@@ -441,14 +441,14 @@ def check_connectivity_bfs(basic_cells, n, m):
 
 
 def fix_graph(problem, allocation, basic_cells):
-    """Ensure the transport graph is a spanning tree (acyclic + connected).
-    Returns (allocation, basic_cells, log_lines)."""
+    """S'assure que le graphe de transport est un arbre couvrant (acyclique + connexe).
+    Retourne (allocation, cellules_de_base, lignes_de_log)."""
     n, m  = problem.n, problem.m
     alloc = [row[:] for row in allocation]
     basic = set(basic_cells)
     log   = []
 
-    # ── 1. Remove cycles ────────────────────────────────────────────────────
+    # ── 1. Supprimer les cycles ───────────────────────────────────────────────
     nc = 0
     while True:
         cycle = detect_cycle_bfs(basic, n, m)
@@ -471,7 +471,7 @@ def fix_graph(problem, allocation, basic_cells):
     if nc:
         log.append(f"\n  → Graphe acyclique  ({nc} cycle(s) supprimé(s))")
 
-    # ── 2. Fix connectivity ─────────────────────────────────────────────────
+    # ── 2. Corriger la connexité ──────────────────────────────────────────────
     added = 0
     while len(basic) < n + m - 1:
         ok, comps = check_connectivity_bfs(basic, n, m)
@@ -507,12 +507,12 @@ def fix_graph(problem, allocation, basic_cells):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Potential method  (MODI)
+# Méthode des potentiels (MODI)
 # ══════════════════════════════════════════════════════════════════════════════
 
 def compute_potentials(problem, basic_cells):
-    """Compute row potentials u[] and column potentials v[] (MODI / u-v method).
-    Sets u[0] = 0 then propagates through the spanning tree via BFS."""
+    """Calcule les potentiels de lignes u[] et de colonnes v[] (méthode MODI / u-v).
+    Initialise u[0] = 0 puis propage à travers l'arbre couvrant par BFS."""
     n, m = problem.n, problem.m
     u    = [None] * n
     v    = [None] * m
@@ -531,9 +531,9 @@ def compute_potentials(problem, basic_cells):
         for nt, nidx in g[(t, idx)]:
             if (nt, nidx) not in visited:
                 visited.add((nt, nidx))
-                if t == "r":               # row → column
+                if t == "r":               # ligne → colonne
                     v[nidx] = problem.costs[idx][nidx] - u[idx]
-                else:                      # column → row
+                else:                      # colonne → ligne
                     u[nidx] = problem.costs[nidx][idx] - v[idx]
                 queue.append((nt, nidx))
 
@@ -541,7 +541,7 @@ def compute_potentials(problem, basic_cells):
 
 
 def compute_marginal_costs(problem, basic_cells, u, v):
-    """Marginal cost for every non-basic cell:  aij − ui − vj."""
+    """Coût marginal pour chaque cellule hors-base : aij − ui − vj."""
     n, m = problem.n, problem.m
     mg   = [[None] * m for _ in range(n)]
     for i in range(n):
@@ -552,7 +552,7 @@ def compute_marginal_costs(problem, basic_cells, u, v):
 
 
 def find_improving_edge(basic_cells, marginal):
-    """Return the non-basic cell with the most negative marginal cost, or None."""
+    """Retourne la cellule hors-base au coût marginal le plus négatif, ou None."""
     best, best_v = None, 0
     for i, row in enumerate(marginal):
         for j, val in enumerate(row):
@@ -562,8 +562,8 @@ def find_improving_edge(basic_cells, marginal):
 
 
 def find_cycle_for_edge(basic_cells, i0, j0, n, m):
-    """Find the unique cycle created by adding (i0, j0) to the spanning tree.
-    Returns cycle cells with (i0, j0) first (the entering / '+' edge)."""
+    """Trouve le cycle unique créé par l'ajout de (i0, j0) à l'arbre couvrant.
+    Retourne les cellules du cycle avec (i0, j0) en premier (arête entrante / '+')."""
     g     = _adj(basic_cells, n)
     start = i0
     end   = n + j0
@@ -579,7 +579,7 @@ def find_cycle_for_edge(basic_cells, i0, j0, n, m):
                 par[vv] = u
                 q.append(vv)
 
-    # Reconstruct path  start → end
+    # Reconstruction du chemin start → end
     path = []
     nd   = end
     while nd is not None:
@@ -587,7 +587,7 @@ def find_cycle_for_edge(basic_cells, i0, j0, n, m):
         nd = par.get(nd)
     path.reverse()   # [start=i0, …, n+j0]
 
-    # Entering edge first (gets '+')
+    # Arête entrante en premier (reçoit '+')
     cycle = [(i0, j0)]
     for k in range(len(path) - 1):
         a, b = path[k], path[k + 1]
@@ -596,16 +596,16 @@ def find_cycle_for_edge(basic_cells, i0, j0, n, m):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Main solve generator
+# Générateur principal de résolution
 # ══════════════════════════════════════════════════════════════════════════════
 
 def solve(problem, method="NW"):
-    """Generator that yields step-dictionaries for each phase of the solution.
+    """Générateur qui produit des dictionnaires d'étapes pour chaque phase de la résolution.
 
-    Step types:
-      'initial'     – initial proposal (NW or BH)
-      'iteration'   – one stepping-stone iteration (potentials + marginals)
-      'improvement' – one cycle maximisation (entering/leaving arcs)
+    Types d'étapes :
+      'initial'     – proposition initiale (NW ou BH)
+      'iteration'   – une itération stepping-stone (potentiels + marginaux)
+      'improvement' – une maximisation sur cycle (arcs entrant/sortant)
     """
     if method == "NW":
         alloc, basic, init_log = north_west(problem)
@@ -620,12 +620,12 @@ def solve(problem, method="NW"):
 
     for iteration in range(1, 1001):
 
-        # Save state before fix (for degeneracy display)
+        # Sauvegarder l'état avant correction (pour affichage de la dégénérescence)
         pre_alloc = [r[:] for r in alloc]
         pre_basic = frozenset(basic)
         pre_cost  = compute_total_cost(problem, alloc)
 
-        # Fix graph (cycles + connectivity)
+        # Corriger le graphe (cycles + connexité)
         alloc, basic, fix_log = fix_graph(problem, alloc, basic)
 
         cost  = compute_total_cost(problem, alloc)
@@ -646,7 +646,7 @@ def solve(problem, method="NW"):
         if edge is None:
             break   # Optimal
 
-        # Maximise on the cycle formed by the entering edge
+        # Maximiser sur le cycle formé par l'arête entrante
         i0, j0  = edge
         cycle   = find_cycle_for_edge(basic, i0, j0, problem.n, problem.m)
         alloc, basic, removed, delta = maximize_on_cycle(alloc, basic, cycle)

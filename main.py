@@ -1,14 +1,14 @@
 """
-main.py  –  Transportation Problem Solver  (tkinter GUI)
+main.py  –  Solveur de Problèmes de Transport  (interface graphique tkinter)
 
-Usage:
+Utilisation :
     python main.py
 
-Features:
-  • Load any .txt problem file without restarting
-  • Choose between Nord-Ouest and Balas-Hammer initial proposals
-  • Full step-by-step trace in a scrollable monospace console
-  • Save the trace to a .txt file
+Fonctionnalités :
+  • Charger n'importe quel fichier .txt sans redémarrer
+  • Choisir entre la proposition initiale Nord-Ouest et Balas-Hammer
+  • Trace complète étape par étape dans une console défilante à largeur fixe
+  • Sauvegarder la trace dans un fichier .txt
 """
 
 import os
@@ -34,10 +34,10 @@ class TransportApp:
         self._build_ui()
         self._status("Prêt.  Chargez un fichier .txt pour commencer.")
 
-    # ── UI construction ───────────────────────────────────────────────────────
+    # ── Construction de l'interface ───────────────────────────────────────────
 
     def _build_ui(self):
-        # ── Top toolbar ──────────────────────────────────────────────────────
+        # ── Barre d'outils supérieure ─────────────────────────────────────────
         toolbar = tk.Frame(self.root, bg="#2d2d2d", pady=6, padx=8)
         toolbar.pack(fill=tk.X, side=tk.TOP)
 
@@ -56,7 +56,7 @@ class TransportApp:
                                  font=("Segoe UI", 9, "italic"))
         self.file_lbl.pack(side=tk.LEFT, padx=(0, 20))
 
-        # Algorithm selection
+        # Sélection de l'algorithme
         tk.Label(toolbar, text="Algorithme initial :", fg="white",
                  bg="#2d2d2d", font=("Segoe UI", 10)).pack(side=tk.LEFT)
 
@@ -67,13 +67,13 @@ class TransportApp:
                            activebackground="#2d2d2d", activeforeground="white",
                            font=("Segoe UI", 10)).pack(side=tk.LEFT, padx=4)
 
-        tk.Frame(toolbar, bg="#2d2d2d", width=20).pack(side=tk.LEFT)  # spacer
+        tk.Frame(toolbar, bg="#2d2d2d", width=20).pack(side=tk.LEFT)  # espaceur
 
         btn(toolbar, "▶  Résoudre",        self._solve,      bg="#2196F3").pack(side=tk.LEFT, padx=(0, 6))
         btn(toolbar, "💾  Sauvegarder",    self._save_trace, bg="#FF9800").pack(side=tk.LEFT, padx=(0, 6))
         btn(toolbar, "🗑  Effacer",         self._clear,      bg="#757575").pack(side=tk.LEFT)
 
-        # ── Main text area ───────────────────────────────────────────────────
+        # ── Zone de texte principale ──────────────────────────────────────────
         frame = tk.Frame(self.root)
         frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=(2, 0))
 
@@ -88,27 +88,27 @@ class TransportApp:
         )
         self.text.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
 
-        # Horizontal scrollbar
+        # Barre de défilement horizontale
         hbar = tk.Scrollbar(self.root, orient=tk.HORIZONTAL,
                             command=self.text.xview)
         self.text.configure(xscrollcommand=hbar.set)
         hbar.pack(fill=tk.X, padx=4, pady=(0, 2))
 
-        # Colour tags for highlighting
+        # Balises de couleur pour la mise en évidence
         self.text.tag_config("section",  foreground="#569cd6", font=("Courier New", 10, "bold"))
         self.text.tag_config("ok",       foreground="#4ec9b0")
         self.text.tag_config("warn",     foreground="#dcdcaa")
         self.text.tag_config("improve",  foreground="#ce9178")
         self.text.tag_config("optimal",  foreground="#4ec9b0", font=("Courier New", 10, "bold"))
 
-        # ── Status bar ───────────────────────────────────────────────────────
+        # ── Barre d'état ──────────────────────────────────────────────────────
         self.status_var = tk.StringVar()
         tk.Label(self.root, textvariable=self.status_var,
                  bd=1, relief=tk.SUNKEN, anchor=tk.W,
                  font=("Segoe UI", 9), padx=6,
                  bg="#333", fg="#ccc").pack(fill=tk.X, side=tk.BOTTOM)
 
-    # ── Event handlers ────────────────────────────────────────────────────────
+    # ── Gestionnaires d'événements ────────────────────────────────────────────
 
     def _load_file(self):
         path = filedialog.askopenfilename(
@@ -134,7 +134,7 @@ class TransportApp:
                      f"Total provisions = {sum(prob.supply)}   "
                      f"Total commandes = {sum(prob.demand)}")
 
-        # Show cost matrix immediately
+        # Afficher la matrice des coûts immédiatement
         self._clear()
         self._w(f"Fichier : {path}\n")
         self._w(f"Dimensions : {prob.n} fournisseurs × {prob.m} clients\n")
@@ -176,7 +176,7 @@ class TransportApp:
     def _render_step(self, step):
         n, m = self.problem.n, self.problem.m
 
-        # ── Initial proposal ─────────────────────────────────────────────────
+        # ── Proposition initiale ──────────────────────────────────────────────
         if step["type"] == "initial":
             for line in step["log"]:
                 tag = "warn" if "⚠" in line else None
@@ -188,21 +188,21 @@ class TransportApp:
                 ) + "\n\n"
             )
 
-        # ── Stepping-stone iteration ─────────────────────────────────────────
+        # ── Itération pas-à-pas ───────────────────────────────────────────────
         elif step["type"] == "iteration":
             bar = "━" * 64
             self._w(f"\n{bar}\n", "section")
             self._w(f"  ITÉRATION {step['iteration']}\n", "section")
             self._w(f"{bar}\n", "section")
 
-            # Degeneracy check (on pre-fix state)
+            # Vérification de la dégénérescence (avant correction)
             nb_pre = len(step["pre_basic_cells"])
             needed = n + m - 1
             if nb_pre < needed:
                 self._w(f"\n  ⚠ Proposition dégénérée avant correction : "
                         f"{nb_pre}/{needed} cellules de base\n", "warn")
 
-            # Graph corrections (if any)
+            # Corrections du graphe (le cas échéant)
             if step["fix_log"]:
                 self._w("\n  [Correction du graphe de transport]\n", "warn")
                 for line in step["fix_log"]:
@@ -215,21 +215,21 @@ class TransportApp:
             else:
                 self._w(f"\n  ⚠ Toujours dégénérée : {nb_post}/{needed} cellules\n", "warn")
 
-            # Allocation table + cost
+            # Tableau d'allocation + coût
             self._w(
                 transport.display_allocation_table(
                     self.problem, step["allocation"], step["basic_cells"]
                 ) + "\n"
             )
 
-            # Potential table
+            # Tableau des potentiels
             self._w(
                 transport.display_potential_table(
                     self.problem, step["basic_cells"], step["u"], step["v"]
                 ) + "\n"
             )
 
-            # Marginal cost table
+            # Tableau des coûts marginaux
             self._w(
                 transport.display_marginal_table(
                     self.problem, step["basic_cells"], step["marginal"],
@@ -246,7 +246,7 @@ class TransportApp:
                 self._w(f"\n  Arête améliorante détectée : (P{ei+1}, C{ej+1})"
                         f"   [coût marginal = {mv}]\n", "improve")
 
-        # ── Cycle maximisation ───────────────────────────────────────────────
+        # ── Maximisation sur le cycle ─────────────────────────────────────────
         elif step["type"] == "improvement":
             ei, ej  = step["edge"]
             cycle   = step["cycle"]
@@ -290,10 +290,10 @@ class TransportApp:
     def _clear(self):
         self.text.delete("1.0", tk.END)
 
-    # ── Helpers ───────────────────────────────────────────────────────────────
+    # ── Utilitaires ───────────────────────────────────────────────────────────
 
     def _w(self, text, tag=None):
-        """Append *text* to the console (with optional colour tag)."""
+        """Ajoute *text* à la console (avec balise de couleur optionnelle)."""
         self.text.insert(tk.END, text, tag or "")
         self.text.see(tk.END)
 
@@ -302,14 +302,14 @@ class TransportApp:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Entry point
+# Point d'entrée
 # ══════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1200x750")
     try:
-        # Windows DPI awareness (makes text crisp on high-DPI screens)
+        # Sensibilisation DPI Windows (texte net sur écrans haute résolution)
         from ctypes import windll
         windll.shcore.SetProcessDpiAwareness(1)
     except Exception:
