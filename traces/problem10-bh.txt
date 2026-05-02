@@ -169,4 +169,4 @@
   P2   ---    21   ---    33     3     7    22
   P3    43     5   ---   ---   ---   ---   ---
 
-  ✅  Solution OPTIMALE  –  Coût = 54000
+  Solution OPTIMALE  –  Coût = 54000

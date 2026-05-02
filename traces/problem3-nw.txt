@@ -102,4 +102,4 @@
   P1    50   ---
   P2   ---   ---
 
-  ✅  Solution OPTIMALE  –  Coût = 33000
+  Solution OPTIMALE  –  Coût = 33000

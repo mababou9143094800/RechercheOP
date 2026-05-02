@@ -186,4 +186,4 @@ P5(-12)    -2     8
   P4   ---   ---
   P5    14   ---
 
-  ✅  Solution OPTIMALE  –  Coût = 17600
+  Solution OPTIMALE  –  Coût = 17600

@@ -201,4 +201,4 @@ P7(-16)     8     4    -1
   P6   ---    37    31
   P7    42   ---    23
 
-  ✅  Solution OPTIMALE  –  Coût = 5700
+  Solution OPTIMALE  –  Coût = 5700

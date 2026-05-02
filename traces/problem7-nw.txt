@@ -128,4 +128,4 @@ P2(-20)    10     0
   P3   ---   ---
   P4     0   ---
 
-  ✅  Solution OPTIMALE  –  Coût = 16000
+  Solution OPTIMALE  –  Coût = 16000

@@ -155,4 +155,4 @@
   P2   ---     1   ---
   P3   ---   ---     2
 
-  ✅  Solution OPTIMALE  –  Coût = 425
+  Solution OPTIMALE  –  Coût = 425
