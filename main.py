@@ -34,7 +34,7 @@ class TransportApp:
                              relief=tk.FLAT, padx=10, pady=3,
                              cursor="hand2")
 
-        btn(toolbar, "📂  Charger fichier .txt", self._load_file,
+        btn(toolbar, " Charger fichier .txt", self._load_file,
             bg="#4CAF50").pack(side=tk.LEFT, padx=(0, 10))
 
         self.file_lbl = tk.Label(toolbar, text="Aucun fichier chargé",
@@ -55,9 +55,9 @@ class TransportApp:
 
         tk.Frame(toolbar, bg="#2d2d2d", width=20).pack(side=tk.LEFT)  # espaceur
 
-        btn(toolbar, "▶  Résoudre",        self._solve,      bg="#2196F3").pack(side=tk.LEFT, padx=(0, 6))
-        btn(toolbar, "💾  Sauvegarder",    self._save_trace, bg="#FF9800").pack(side=tk.LEFT, padx=(0, 6))
-        btn(toolbar, "🗑  Effacer",         self._clear,      bg="#757575").pack(side=tk.LEFT)
+        btn(toolbar, " Résoudre",        self._solve,      bg="#2196F3").pack(side=tk.LEFT, padx=(0, 6))
+        btn(toolbar, " Sauvegarder",    self._save_trace, bg="#FF9800").pack(side=tk.LEFT, padx=(0, 6))
+        btn(toolbar, " Effacer",         self._clear,      bg="#757575").pack(side=tk.LEFT)
 
         # Zone de texte principale
         frame = tk.Frame(self.root)
@@ -225,7 +225,7 @@ class TransportApp:
 
             # Conclusion
             if step["improving_edge"] is None:
-                self._w(f"\n  ✅  Solution OPTIMALE  –  Coût = {step['cost']}\n", "optimal")
+                self._w(f"\n   Solution OPTIMALE  –  Coût = {step['cost']}\n", "optimal")
             else:
                 ei, ej  = step["improving_edge"]
                 mv      = step["marginal"][ei][ej]
