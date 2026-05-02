@@ -1,16 +1,3 @@
-"""
-main.py  –  Solveur de Problèmes de Transport  (interface graphique tkinter)
-
-Utilisation :
-    python main.py
-
-Fonctionnalités :
-  • Charger n'importe quel fichier .txt sans redémarrer
-  • Choisir entre la proposition initiale Nord-Ouest et Balas-Hammer
-  • Trace complète étape par étape dans une console défilante à largeur fixe
-  • Sauvegarder la trace dans un fichier .txt
-"""
-
 import os
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
@@ -19,9 +6,8 @@ import traceback as _tb
 import transport
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # Application
-# ══════════════════════════════════════════════════════════════════════════════
 
 class TransportApp:
     def __init__(self, root):
@@ -34,10 +20,10 @@ class TransportApp:
         self._build_ui()
         self._status("Prêt.  Chargez un fichier .txt pour commencer.")
 
-    # ── Construction de l'interface ───────────────────────────────────────────
+    # Construction de l'interface 
 
     def _build_ui(self):
-        # ── Barre d'outils supérieure ─────────────────────────────────────────
+        # Barre d'outils supérieure 
         toolbar = tk.Frame(self.root, bg="#2d2d2d", pady=6, padx=8)
         toolbar.pack(fill=tk.X, side=tk.TOP)
 
@@ -73,7 +59,7 @@ class TransportApp:
         btn(toolbar, "💾  Sauvegarder",    self._save_trace, bg="#FF9800").pack(side=tk.LEFT, padx=(0, 6))
         btn(toolbar, "🗑  Effacer",         self._clear,      bg="#757575").pack(side=tk.LEFT)
 
-        # ── Zone de texte principale ──────────────────────────────────────────
+        # Zone de texte principale
         frame = tk.Frame(self.root)
         frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=(2, 0))
 
@@ -101,14 +87,14 @@ class TransportApp:
         self.text.tag_config("improve",  foreground="#ce9178")
         self.text.tag_config("optimal",  foreground="#4ec9b0", font=("Courier New", 10, "bold"))
 
-        # ── Barre d'état ──────────────────────────────────────────────────────
+        # Barre d'état
         self.status_var = tk.StringVar()
         tk.Label(self.root, textvariable=self.status_var,
                  bd=1, relief=tk.SUNKEN, anchor=tk.W,
                  font=("Segoe UI", 9), padx=6,
                  bg="#333", fg="#ccc").pack(fill=tk.X, side=tk.BOTTOM)
 
-    # ── Gestionnaires d'événements ────────────────────────────────────────────
+    # Gestionnaires d'événements 
 
     def _load_file(self):
         path = filedialog.askopenfilename(
@@ -176,7 +162,7 @@ class TransportApp:
     def _render_step(self, step):
         n, m = self.problem.n, self.problem.m
 
-        # ── Proposition initiale ──────────────────────────────────────────────
+        # Proposition initiale 
         if step["type"] == "initial":
             for line in step["log"]:
                 tag = "warn" if "⚠" in line else None
@@ -188,7 +174,7 @@ class TransportApp:
                 ) + "\n\n"
             )
 
-        # ── Itération pas-à-pas ───────────────────────────────────────────────
+        # Itération pas-à-pas 
         elif step["type"] == "iteration":
             bar = "━" * 64
             self._w(f"\n{bar}\n", "section")
@@ -246,7 +232,7 @@ class TransportApp:
                 self._w(f"\n  Arête améliorante détectée : (P{ei+1}, C{ej+1})"
                         f"   [coût marginal = {mv}]\n", "improve")
 
-        # ── Maximisation sur le cycle ─────────────────────────────────────────
+        # Maximisation sur le cycle 
         elif step["type"] == "improvement":
             ei, ej  = step["edge"]
             cycle   = step["cycle"]
@@ -290,7 +276,7 @@ class TransportApp:
     def _clear(self):
         self.text.delete("1.0", tk.END)
 
-    # ── Utilitaires ───────────────────────────────────────────────────────────
+    # Utilitaires 
 
     def _w(self, text, tag=None):
         """Ajoute *text* à la console (avec balise de couleur optionnelle)."""
@@ -300,10 +286,6 @@ class TransportApp:
     def _status(self, msg):
         self.status_var.set(msg)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# Point d'entrée
-# ══════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     root = tk.Tk()
