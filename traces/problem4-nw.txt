@@ -1,0 +1,105 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem4.txt
+  Algorithme initial : Nord-Ouest
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+          C1     C2     Pi
+──────────────────────────
+   P1     30      1    600
+   P2      1     30    500
+──────────────────────────
+   Cj    100   1000
+
+
+══ MÉTHODE NORD-OUEST ══
+  Alloc     100 → (P1, C1)    [P1 restant=500,  C1 restant=0]
+  Alloc     500 → (P1, C2)    [P1 restant=0,  C2 restant=500]
+  Alloc     500 → (P2, C2)    [P2 restant=0,  C2 restant=0]
+
+  → 3 cellules de base  (requis : 3)
+
+╔══ PROPOSITION INITIALE (Nord-Ouest) ══╗
+          C1     C2     Pi
+──────────────────────────
+   P1    100    500    600
+   P2           500    500
+──────────────────────────
+   Cj    100   1000
+
+  Coût total : 18500
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 3/3 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+          C1     C2     Pi
+──────────────────────────
+   P1    100    500    600
+   P2           500    500
+──────────────────────────
+   Cj    100   1000
+
+  Coût total : 18500
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=29
+  Potentiels colonnes: v1=30   v2=1
+
+  ui\vj  C1(30)  C2(1)
+───────────────────
+  P1(0)    30     1
+ P2(29)    59    30
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2
+────────────────
+  P1   ---   ---
+  P2  [-58]   ---
+
+  Arête améliorante détectée : (P2, C1)   [coût marginal = -58]
+
+  Ajout de (P2,C1) dans la base
+  Cycle : (P2,C1) → (P2,C2) → (P1,C2) → (P1,C1) → (P2,C1)
+  (+) : ['(P2,C1)', '(P1,C2)']
+  (-) : ['(P2,C2)', '(P1,C1)']
+  δ   = 100
+  Arête retirée : ['(P1,C1)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 3/3 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+          C1     C2     Pi
+──────────────────────────
+   P1           600    600
+   P2    100    400    500
+──────────────────────────
+   Cj    100   1000
+
+  Coût total : 12700
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=29
+  Potentiels colonnes: v1=-28   v2=1
+
+   ui\vj  C1(-28)  C2(1)
+────────────────────
+   P1(0)   -28     1
+  P2(29)     1    30
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2
+────────────────
+  P1    58   ---
+  P2   ---   ---
+
+  ✅  Solution OPTIMALE  –  Coût = 12700

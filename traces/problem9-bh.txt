@@ -1,0 +1,204 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem9.txt
+  Algorithme initial : Balas-Hammer
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1    30    20    15   100
+  P2    10    50     2   100
+  P3     9    10    30   100
+  P4     6     2    29   100
+  P5    50    40     3   100
+  P6     5    38    27   100
+  P7    50     4    22   100
+────────────────────────────
+  Cj   400   200   100
+
+
+══ MÉTHODE BALAS-HAMMER ══
+
+  ── Étape 1 ──
+  Pén. lignes   : P1=5   P2=8   P3=1   P4=4   P5=37   P6=22   P7=18
+  Pén. colonnes : C1=1   C2=2   C3=1
+  Pénalité max = 37  →  lignes ['P5']
+  Choix ligne P5  → cellule min : (P5, C3)  coût=3
+  Alloc     100 → (P5, C3)    [P5 restant=0,  C3 restant=0]
+  ⚠ Dégénérescence : P5 et C3 épuisés simultanément
+
+  ── Étape 2 ──
+  Pén. lignes   : P1=10   P2=40   P3=1   P4=4   P6=33   P7=46
+  Pén. colonnes : C1=1   C2=2
+  Pénalité max = 46  →  lignes ['P7']
+  Choix ligne P7  → cellule min : (P7, C2)  coût=4
+  Alloc     100 → (P7, C2)    [P7 restant=0,  C2 restant=100]
+
+  ── Étape 3 ──
+  Pén. lignes   : P1=10   P2=40   P3=1   P4=4   P6=33
+  Pén. colonnes : C1=1   C2=8
+  Pénalité max = 40  →  lignes ['P2']
+  Choix ligne P2  → cellule min : (P2, C1)  coût=10
+  Alloc     100 → (P2, C1)    [P2 restant=0,  C1 restant=300]
+
+  ── Étape 4 ──
+  Pén. lignes   : P1=10   P3=1   P4=4   P6=33
+  Pén. colonnes : C1=1   C2=8
+  Pénalité max = 33  →  lignes ['P6']
+  Choix ligne P6  → cellule min : (P6, C1)  coût=5
+  Alloc     100 → (P6, C1)    [P6 restant=0,  C1 restant=200]
+
+  ── Étape 5 ──
+  Pén. lignes   : P1=10   P3=1   P4=4
+  Pén. colonnes : C1=3   C2=8
+  Pénalité max = 10  →  lignes ['P1']
+  Choix ligne P1  → cellule min : (P1, C2)  coût=20
+  Alloc     100 → (P1, C2)    [P1 restant=0,  C2 restant=0]
+  ⚠ Dégénérescence : P1 et C2 épuisés simultanément
+
+  ── Étape 6 ──
+  Pén. lignes   : P3=9   P4=6
+  Pén. colonnes : C1=3
+  Pénalité max = 9  →  lignes ['P3']
+  Choix ligne P3  → cellule min : (P3, C1)  coût=9
+  Alloc     100 → (P3, C1)    [P3 restant=0,  C1 restant=100]
+
+  ── Étape 7 ──
+  Pén. lignes   : P4=6
+  Pén. colonnes : C1=6
+  Pénalité max = 6  →  lignes ['P4']  +  colonnes ['C1']
+  Choix ligne P4  → cellule min : (P4, C1)  coût=6
+  Alloc     100 → (P4, C1)    [P4 restant=0,  C1 restant=0]
+
+  → 7 cellules de base  (requis : 9)
+  ⚠ Solution dégénérée : 2 cellule(s) manquante(s)
+
+╔══ PROPOSITION INITIALE (Balas-Hammer) ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1         100         100
+  P2   100               100
+  P3   100               100
+  P4   100               100
+  P5               100   100
+  P6   100               100
+  P7         100         100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 5700
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ Proposition dégénérée avant correction : 7/9 cellules de base
+
+  [Correction du graphe de transport]
+
+  [Connexité]  3 composantes : {P1, P7, C2}  |  {P2, P3, P4, P6, C1}  |  {P5, C3}
+  → Arête ajoutée (alloc=0) : (P2,C3)  coût=2
+
+  [Connexité]  2 composantes : {P1, P7, C2}  |  {P2, P3, P4, P5, P6, C1, C3}
+  → Arête ajoutée (alloc=0) : (P4,C2)  coût=2
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1         100         100
+  P2   100           0   100
+  P3   100               100
+  P4   100     0         100
+  P5               100   100
+  P6   100               100
+  P7         100         100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 5700
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-14   u3=-15   u4=-18   u5=-13   u6=-19   u7=-16
+  Potentiels colonnes: v1=24   v2=20   v3=16
+
+  ui\vj  C1(24)  C2(20)  C3(16)
+─────────────────────────
+  P1(0)    24    20    16
+P2(-14)    10     6     2
+P3(-15)     9     5     1
+P4(-18)     6     2    -2
+P5(-13)    11     7     3
+P6(-19)     5     1    -3
+P7(-16)     8     4     0
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1     6   ---  [-1]
+  P2   ---    44   ---
+  P3   ---     5    29
+  P4   ---   ---    31
+  P5    39    33   ---
+  P6   ---    37    30
+  P7    42   ---    22
+
+  Arête améliorante détectée : (P1, C3)   [coût marginal = -1]
+
+  Ajout de (P1,C3) dans la base
+  Cycle : (P1,C3) → (P1,C2) → (P4,C2) → (P4,C1) → (P2,C1) → (P2,C3) → (P1,C3)
+  (+) : ['(P1,C3)', '(P4,C2)', '(P2,C1)']
+  (-) : ['(P1,C2)', '(P4,C1)', '(P2,C3)']
+  δ   = 0
+  Arête retirée : ['(P2,C3)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1         100     0   100
+  P2   100               100
+  P3   100               100
+  P4   100     0         100
+  P5               100   100
+  P6   100               100
+  P7         100         100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 5700
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-14   u3=-15   u4=-18   u5=-12   u6=-19   u7=-16
+  Potentiels colonnes: v1=24   v2=20   v3=15
+
+  ui\vj  C1(24)  C2(20)  C3(15)
+─────────────────────────
+  P1(0)    24    20    15
+P2(-14)    10     6     1
+P3(-15)     9     5     0
+P4(-18)     6     2    -3
+P5(-12)    12     8     3
+P6(-19)     5     1    -4
+P7(-16)     8     4    -1
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1     6   ---   ---
+  P2   ---    44     1
+  P3   ---     5    30
+  P4   ---   ---    32
+  P5    38    32   ---
+  P6   ---    37    31
+  P7    42   ---    23
+
+  ✅  Solution OPTIMALE  –  Coût = 5700

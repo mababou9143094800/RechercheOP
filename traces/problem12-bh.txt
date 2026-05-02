@@ -1,0 +1,279 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem12.txt
+  Algorithme initial : Balas-Hammer
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    C3    C4    C5    C6    C7    C8    C9   C10   C11   C12   C13   C14   C15   C16    Pi
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+  P1   186   185   184   183   182   181   180   179   178   177   176   175   174   173   172   171   160
+  P2   166   165   164   163   162   161   160   159   158   157   156   155   154   153   152   151   160
+  P3   156   155   154   153   152   151   150   149   148   147   146   145   144   143   142   141   160
+  P4   136   135   134   133   132   131   130   129   128   127   126   125   124   123   122   121   160
+  P5   116   115   114   113   112   111   110   109   108   107   106   105   104   103   102   101   160
+  P6    96    95    94    93    92    91    90    89    88    87    86    85    84    83    82    81   160
+  P7    76    75    74    73    72    71    70    69    68    67    66    65    64    63    62    61   160
+  P8    56    55    54    53    52    51    50    49    48    47    46    45    44    43    42    41   160
+  P9    36    35    34    33    32    31    30    29    28    27    26    25    24    23    22    21   160
+ P10    16    15    14    13    12    11    10     9     8     7     6     5     4     3     2     1   160
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Cj   100   100   100   100   100   100   100   100   100   100   100   100   100   100   100   100
+
+
+══ MÉTHODE BALAS-HAMMER ══
+
+  ── Étape 1 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1   P8=1   P9=1   P10=1
+  Pén. colonnes : C1=20   C2=20   C3=20   C4=20   C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C1  → cellule min : (P10, C1)  coût=16
+  Alloc     100 → (P10, C1)    [P10 restant=60,  C1 restant=0]
+
+  ── Étape 2 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1   P8=1   P9=1   P10=1
+  Pén. colonnes : C2=20   C3=20   C4=20   C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C2  → cellule min : (P10, C2)  coût=15
+  Alloc      60 → (P10, C2)    [P10 restant=0,  C2 restant=40]
+
+  ── Étape 3 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1   P8=1   P9=1
+  Pén. colonnes : C2=20   C3=20   C4=20   C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C2  → cellule min : (P9, C2)  coût=35
+  Alloc      40 → (P9, C2)    [P9 restant=120,  C2 restant=0]
+
+  ── Étape 4 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1   P8=1   P9=1
+  Pén. colonnes : C3=20   C4=20   C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C3  → cellule min : (P9, C3)  coût=34
+  Alloc     100 → (P9, C3)    [P9 restant=20,  C3 restant=0]
+
+  ── Étape 5 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1   P8=1   P9=1
+  Pén. colonnes : C4=20   C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C4  → cellule min : (P9, C4)  coût=33
+  Alloc      20 → (P9, C4)    [P9 restant=0,  C4 restant=80]
+
+  ── Étape 6 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1   P8=1
+  Pén. colonnes : C4=20   C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C4  → cellule min : (P8, C4)  coût=53
+  Alloc      80 → (P8, C4)    [P8 restant=80,  C4 restant=0]
+
+  ── Étape 7 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1   P8=1
+  Pén. colonnes : C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C5  → cellule min : (P8, C5)  coût=52
+  Alloc      80 → (P8, C5)    [P8 restant=0,  C5 restant=20]
+
+  ── Étape 8 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1
+  Pén. colonnes : C5=20   C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C5  → cellule min : (P7, C5)  coût=72
+  Alloc      20 → (P7, C5)    [P7 restant=140,  C5 restant=0]
+
+  ── Étape 9 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1
+  Pén. colonnes : C6=20   C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C6  → cellule min : (P7, C6)  coût=71
+  Alloc     100 → (P7, C6)    [P7 restant=40,  C6 restant=0]
+
+  ── Étape 10 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1   P7=1
+  Pén. colonnes : C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C7  → cellule min : (P7, C7)  coût=70
+  Alloc      40 → (P7, C7)    [P7 restant=0,  C7 restant=60]
+
+  ── Étape 11 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1
+  Pén. colonnes : C7=20   C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C7  → cellule min : (P6, C7)  coût=90
+  Alloc      60 → (P6, C7)    [P6 restant=100,  C7 restant=0]
+
+  ── Étape 12 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1   P6=1
+  Pén. colonnes : C8=20   C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C8  → cellule min : (P6, C8)  coût=89
+  Alloc     100 → (P6, C8)    [P6 restant=0,  C8 restant=0]
+  ⚠ Dégénérescence : P6 et C8 épuisés simultanément
+
+  ── Étape 13 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1
+  Pén. colonnes : C9=20   C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C9  → cellule min : (P5, C9)  coût=108
+  Alloc     100 → (P5, C9)    [P5 restant=60,  C9 restant=0]
+
+  ── Étape 14 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1   P5=1
+  Pén. colonnes : C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C10  → cellule min : (P5, C10)  coût=107
+  Alloc      60 → (P5, C10)    [P5 restant=0,  C10 restant=40]
+
+  ── Étape 15 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1
+  Pén. colonnes : C10=20   C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C10  → cellule min : (P4, C10)  coût=127
+  Alloc      40 → (P4, C10)    [P4 restant=120,  C10 restant=0]
+
+  ── Étape 16 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1
+  Pén. colonnes : C11=20   C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C11', 'C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C11  → cellule min : (P4, C11)  coût=126
+  Alloc     100 → (P4, C11)    [P4 restant=20,  C11 restant=0]
+
+  ── Étape 17 ──
+  Pén. lignes   : P1=1   P2=1   P3=1   P4=1
+  Pén. colonnes : C12=20   C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C12  → cellule min : (P4, C12)  coût=125
+  Alloc      20 → (P4, C12)    [P4 restant=0,  C12 restant=80]
+
+  ── Étape 18 ──
+  Pén. lignes   : P1=1   P2=1   P3=1
+  Pén. colonnes : C12=10   C13=10   C14=10   C15=10   C16=10
+  Pénalité max = 10  →  colonnes ['C12', 'C13', 'C14', 'C15', 'C16']
+  Choix colonne C12  → cellule min : (P3, C12)  coût=145
+  Alloc      80 → (P3, C12)    [P3 restant=80,  C12 restant=0]
+
+  ── Étape 19 ──
+  Pén. lignes   : P1=1   P2=1   P3=1
+  Pén. colonnes : C13=10   C14=10   C15=10   C16=10
+  Pénalité max = 10  →  colonnes ['C13', 'C14', 'C15', 'C16']
+  Choix colonne C13  → cellule min : (P3, C13)  coût=144
+  Alloc      80 → (P3, C13)    [P3 restant=0,  C13 restant=20]
+
+  ── Étape 20 ──
+  Pén. lignes   : P1=1   P2=1
+  Pén. colonnes : C13=20   C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C13', 'C14', 'C15', 'C16']
+  Choix colonne C13  → cellule min : (P2, C13)  coût=154
+  Alloc      20 → (P2, C13)    [P2 restant=140,  C13 restant=0]
+
+  ── Étape 21 ──
+  Pén. lignes   : P1=1   P2=1
+  Pén. colonnes : C14=20   C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C14', 'C15', 'C16']
+  Choix colonne C14  → cellule min : (P2, C14)  coût=153
+  Alloc     100 → (P2, C14)    [P2 restant=40,  C14 restant=0]
+
+  ── Étape 22 ──
+  Pén. lignes   : P1=1   P2=1
+  Pén. colonnes : C15=20   C16=20
+  Pénalité max = 20  →  colonnes ['C15', 'C16']
+  Choix colonne C15  → cellule min : (P2, C15)  coût=152
+  Alloc      40 → (P2, C15)    [P2 restant=0,  C15 restant=60]
+
+  ── Étape 23 ──
+  Pén. lignes   : P1=1
+  Pén. colonnes : C15=172   C16=171
+  Pénalité max = 172  →  colonnes ['C15']
+  Choix colonne C15  → cellule min : (P1, C15)  coût=172
+  Alloc      60 → (P1, C15)    [P1 restant=100,  C15 restant=0]
+
+  ── Étape 24 ──
+  Pén. lignes   : P1=171
+  Pén. colonnes : C16=171
+  Pénalité max = 171  →  lignes ['P1']  +  colonnes ['C16']
+  Choix ligne P1  → cellule min : (P1, C16)  coût=171
+  Alloc     100 → (P1, C16)    [P1 restant=0,  C16 restant=0]
+
+  → 24 cellules de base  (requis : 25)
+  ⚠ Solution dégénérée : 1 cellule(s) manquante(s)
+
+╔══ PROPOSITION INITIALE (Balas-Hammer) ══╗
+        C1    C2    C3    C4    C5    C6    C7    C8    C9   C10   C11   C12   C13   C14   C15   C16    Pi
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+  P1                                                                                        60   100   160
+  P2                                                                            20   100    40         160
+  P3                                                                      80    80                     160
+  P4                                                          40   100    20                           160
+  P5                                                   100    60                                       160
+  P6                                        60   100                                                   160
+  P7                            20   100    40                                                         160
+  P8                      80    80                                                                     160
+  P9          40   100    20                                                                           160
+ P10   100    60                                                                                       160
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Cj   100   100   100   100   100   100   100   100   100   100   100   100   100   100   100   100
+
+  Coût total : 154400
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ Proposition dégénérée avant correction : 24/25 cellules de base
+
+  [Correction du graphe de transport]
+
+  [Connexité]  2 composantes : {P1, P2, P3, P4, P5, C9, C10, C11, C12, C13, C14, C15, C16}  |  {P6, P7, P8, P9, P10, C1, C2, C3, C4, C5, C6, C7, C8}
+  → Arête ajoutée (alloc=0) : (P10,C16)  coût=1
+
+  Proposition non-dégénérée : 25/25 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    C4    C5    C6    C7    C8    C9   C10   C11   C12   C13   C14   C15   C16    Pi
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+  P1                                                                                        60   100   160
+  P2                                                                            20   100    40         160
+  P3                                                                      80    80                     160
+  P4                                                          40   100    20                           160
+  P5                                                   100    60                                       160
+  P6                                        60   100                                                   160
+  P7                            20   100    40                                                         160
+  P8                      80    80                                                                     160
+  P9          40   100    20                                                                           160
+ P10   100    60                                                                                   0   160
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Cj   100   100   100   100   100   100   100   100   100   100   100   100   100   100   100   100
+
+  Coût total : 154400
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=-30   u4=-50   u5=-70   u6=-90   u7=-110   u8=-130   u9=-150   u10=-170
+  Potentiels colonnes: v1=186   v2=185   v3=184   v4=183   v5=182   v6=181   v7=180   v8=179   v9=178   v10=177   v11=176   v12=175   v13=174   v14=173   v15=172   v16=171
+
+    ui\vj  C1(186)  C2(185)  C3(184)  C4(183)  C5(182)  C6(181)  C7(180)  C8(179)  C9(178)  C10(177)  C11(176)  C12(175)  C13(174)  C14(173)  C15(172)  C16(171)
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    P1(0)    186    185    184    183    182    181    180    179    178    177    176    175    174    173    172    171
+  P2(-20)    166    165    164    163    162    161    160    159    158    157    156    155    154    153    152    151
+  P3(-30)    156    155    154    153    152    151    150    149    148    147    146    145    144    143    142    141
+  P4(-50)    136    135    134    133    132    131    130    129    128    127    126    125    124    123    122    121
+  P5(-70)    116    115    114    113    112    111    110    109    108    107    106    105    104    103    102    101
+  P6(-90)     96     95     94     93     92     91     90     89     88     87     86     85     84     83     82     81
+ P7(-110)     76     75     74     73     72     71     70     69     68     67     66     65     64     63     62     61
+ P8(-130)     56     55     54     53     52     51     50     49     48     47     46     45     44     43     42     41
+ P9(-150)     36     35     34     33     32     31     30     29     28     27     26     25     24     23     22     21
+P10(-170)     16     15     14     13     12     11     10      9      8      7      6      5      4      3      2      1
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3    C4    C5    C6    C7    C8    C9   C10   C11   C12   C13   C14   C15   C16
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  P1     0     0     0     0     0     0     0     0     0     0     0     0     0     0   ---   ---
+  P2     0     0     0     0     0     0     0     0     0     0     0     0   ---   ---   ---     0
+  P3     0     0     0     0     0     0     0     0     0     0     0   ---   ---     0     0     0
+  P4     0     0     0     0     0     0     0     0     0   ---   ---   ---     0     0     0     0
+  P5     0     0     0     0     0     0     0     0   ---   ---     0     0     0     0     0     0
+  P6     0     0     0     0     0     0   ---   ---     0     0     0     0     0     0     0     0
+  P7     0     0     0     0   ---   ---   ---     0     0     0     0     0     0     0     0     0
+  P8     0     0     0   ---   ---     0     0     0     0     0     0     0     0     0     0     0
+  P9     0   ---   ---   ---     0     0     0     0     0     0     0     0     0     0     0     0
+ P10   ---   ---     0     0     0     0     0     0     0     0     0     0     0     0     0   ---
+
+  ✅  Solution OPTIMALE  –  Coût = 154400

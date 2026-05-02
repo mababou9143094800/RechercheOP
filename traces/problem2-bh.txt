@@ -1,0 +1,85 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem2.txt
+  Algorithme initial : Balas-Hammer
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    Pi
+──────────────────────
+  P1    10    20   100
+  P2    30    10   100
+──────────────────────
+  Cj   100   100
+
+
+══ MÉTHODE BALAS-HAMMER ══
+
+  ── Étape 1 ──
+  Pén. lignes   : P1=10   P2=20
+  Pén. colonnes : C1=20   C2=10
+  Pénalité max = 20  →  lignes ['P2']  +  colonnes ['C1']
+  Choix ligne P2  → cellule min : (P2, C2)  coût=10
+  Alloc     100 → (P2, C2)    [P2 restant=0,  C2 restant=0]
+  ⚠ Dégénérescence : P2 et C2 épuisés simultanément
+
+  ── Étape 2 ──
+  Pén. lignes   : P1=10
+  Pén. colonnes : C1=10
+  Pénalité max = 10  →  lignes ['P1']  +  colonnes ['C1']
+  Choix ligne P1  → cellule min : (P1, C1)  coût=10
+  Alloc     100 → (P1, C1)    [P1 restant=0,  C1 restant=0]
+
+  → 2 cellules de base  (requis : 3)
+  ⚠ Solution dégénérée : 1 cellule(s) manquante(s)
+
+╔══ PROPOSITION INITIALE (Balas-Hammer) ══╗
+        C1    C2    Pi
+──────────────────────
+  P1   100         100
+  P2         100   100
+──────────────────────
+  Cj   100   100
+
+  Coût total : 2000
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ Proposition dégénérée avant correction : 2/3 cellules de base
+
+  [Correction du graphe de transport]
+
+  [Connexité]  2 composantes : {P1, C1}  |  {P2, C2}
+  → Arête ajoutée (alloc=0) : (P1,C2)  coût=20
+
+  Proposition non-dégénérée : 3/3 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    Pi
+──────────────────────
+  P1   100     0   100
+  P2         100   100
+──────────────────────
+  Cj   100   100
+
+  Coût total : 2000
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-10
+  Potentiels colonnes: v1=10   v2=20
+
+  ui\vj  C1(10)  C2(20)
+───────────────────
+  P1(0)    10    20
+P2(-10)     0    10
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2
+────────────────
+  P1   ---   ---
+  P2    30   ---
+
+  ✅  Solution OPTIMALE  –  Coût = 2000

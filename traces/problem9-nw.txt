@@ -1,0 +1,437 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem9.txt
+  Algorithme initial : Nord-Ouest
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1    30    20    15   100
+  P2    10    50     2   100
+  P3     9    10    30   100
+  P4     6     2    29   100
+  P5    50    40     3   100
+  P6     5    38    27   100
+  P7    50     4    22   100
+────────────────────────────
+  Cj   400   200   100
+
+
+══ MÉTHODE NORD-OUEST ══
+  Alloc     100 → (P1, C1)    [P1 restant=0,  C1 restant=300]
+  Alloc     100 → (P2, C1)    [P2 restant=0,  C1 restant=200]
+  Alloc     100 → (P3, C1)    [P3 restant=0,  C1 restant=100]
+  Alloc     100 → (P4, C1)    [P4 restant=0,  C1 restant=0]
+  ⚠ Dégénérescence : P4 et C1 épuisés simultanément
+  Alloc     100 → (P5, C2)    [P5 restant=0,  C2 restant=100]
+  Alloc     100 → (P6, C2)    [P6 restant=0,  C2 restant=0]
+  ⚠ Dégénérescence : P6 et C2 épuisés simultanément
+  Alloc     100 → (P7, C3)    [P7 restant=0,  C3 restant=0]
+
+  → 7 cellules de base  (requis : 9)
+  ⚠ Solution dégénérée : 2 cellule(s) manquante(s)
+
+╔══ PROPOSITION INITIALE (Nord-Ouest) ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1   100               100
+  P2   100               100
+  P3   100               100
+  P4   100               100
+  P5         100         100
+  P6         100         100
+  P7               100   100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 15500
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ Proposition dégénérée avant correction : 7/9 cellules de base
+
+  [Correction du graphe de transport]
+
+  [Connexité]  3 composantes : {P1, P2, P3, P4, C1}  |  {P5, P6, C2}  |  {P7, C3}
+  → Arête ajoutée (alloc=0) : (P2,C3)  coût=2
+
+  [Connexité]  2 composantes : {P1, P2, P3, P4, P7, C1, C3}  |  {P5, P6, C2}
+  → Arête ajoutée (alloc=0) : (P4,C2)  coût=2
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1   100               100
+  P2   100           0   100
+  P3   100               100
+  P4   100     0         100
+  P5         100         100
+  P6         100         100
+  P7               100   100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 15500
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=-21   u4=-24   u5=14   u6=12   u7=0
+  Potentiels colonnes: v1=30   v2=26   v3=22
+
+  ui\vj  C1(30)  C2(26)  C3(22)
+─────────────────────────
+  P1(0)    30    26    22
+P2(-20)    10     6     2
+P3(-21)     9     5     1
+P4(-24)     6     2    -2
+ P5(14)    44    40    36
+ P6(12)    42    38    34
+  P7(0)    30    26    22
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1   ---    -6    -7
+  P2   ---    44   ---
+  P3   ---     5    29
+  P4   ---   ---    31
+  P5     6   ---   -33
+  P6  [-37]   ---    -7
+  P7    20   -22   ---
+
+  Arête améliorante détectée : (P6, C1)   [coût marginal = -37]
+
+  Ajout de (P6,C1) dans la base
+  Cycle : (P6,C1) → (P6,C2) → (P4,C2) → (P4,C1) → (P6,C1)
+  (+) : ['(P6,C1)', '(P4,C2)']
+  (-) : ['(P6,C2)', '(P4,C1)']
+  δ   = 100
+  Arête retirée : ['(P4,C1)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1   100               100
+  P2   100           0   100
+  P3   100               100
+  P4         100         100
+  P5         100         100
+  P6   100     0         100
+  P7               100   100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 11800
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=-21   u4=-61   u5=-23   u6=-25   u7=0
+  Potentiels colonnes: v1=30   v2=63   v3=22
+
+  ui\vj  C1(30)  C2(63)  C3(22)
+─────────────────────────
+  P1(0)    30    63    22
+P2(-20)    10    43     2
+P3(-21)     9    42     1
+P4(-61)   -31     2   -39
+P5(-23)     7    40    -1
+P6(-25)     5    38    -3
+  P7(0)    30    63    22
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1   ---   -43    -7
+  P2   ---     7   ---
+  P3   ---   -32    29
+  P4    37   ---    68
+  P5    43   ---     4
+  P6   ---   ---    30
+  P7    20  [-59]   ---
+
+  Arête améliorante détectée : (P7, C2)   [coût marginal = -59]
+
+  Ajout de (P7,C2) dans la base
+  Cycle : (P7,C2) → (P7,C3) → (P2,C3) → (P2,C1) → (P6,C1) → (P6,C2) → (P7,C2)
+  (+) : ['(P7,C2)', '(P2,C3)', '(P6,C1)']
+  (-) : ['(P7,C3)', '(P2,C1)', '(P6,C2)']
+  δ   = 0
+  Arête retirée : ['(P6,C2)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 3
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1   100               100
+  P2   100           0   100
+  P3   100               100
+  P4         100         100
+  P5         100         100
+  P6   100               100
+  P7           0   100   100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 11800
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=-21   u4=-2   u5=36   u6=-25   u7=0
+  Potentiels colonnes: v1=30   v2=4   v3=22
+
+  ui\vj  C1(30)  C2(4)  C3(22)
+─────────────────────────
+  P1(0)    30     4    22
+P2(-20)    10   -16     2
+P3(-21)     9   -17     1
+ P4(-2)    28     2    20
+ P5(36)    66    40    58
+P6(-25)     5   -21    -3
+  P7(0)    30     4    22
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1   ---    16    -7
+  P2   ---    66   ---
+  P3   ---    27    29
+  P4   -22   ---     9
+  P5   -16   ---  [-55]
+  P6   ---    59    30
+  P7    20   ---   ---
+
+  Arête améliorante détectée : (P5, C3)   [coût marginal = -55]
+
+  Ajout de (P5,C3) dans la base
+  Cycle : (P5,C3) → (P5,C2) → (P7,C2) → (P7,C3) → (P5,C3)
+  (+) : ['(P5,C3)', '(P7,C2)']
+  (-) : ['(P5,C2)', '(P7,C3)']
+  δ   = 100
+  Arête retirée : ['(P7,C3)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 4
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1   100               100
+  P2   100           0   100
+  P3   100               100
+  P4         100         100
+  P5           0   100   100
+  P6   100               100
+  P7         100         100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 6300
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=-21   u4=-57   u5=-19   u6=-25   u7=-55
+  Potentiels colonnes: v1=30   v2=59   v3=22
+
+  ui\vj  C1(30)  C2(59)  C3(22)
+─────────────────────────
+  P1(0)    30    59    22
+P2(-20)    10    39     2
+P3(-21)     9    38     1
+P4(-57)   -27     2   -35
+P5(-19)    11    40     3
+P6(-25)     5    34    -3
+P7(-55)   -25     4   -33
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1   ---  [-39]    -7
+  P2   ---    11   ---
+  P3   ---   -28    29
+  P4    33   ---    64
+  P5    39   ---   ---
+  P6   ---     4    30
+  P7    75   ---    55
+
+  Arête améliorante détectée : (P1, C2)   [coût marginal = -39]
+
+  Ajout de (P1,C2) dans la base
+  Cycle : (P1,C2) → (P1,C1) → (P2,C1) → (P2,C3) → (P5,C3) → (P5,C2) → (P1,C2)
+  (+) : ['(P1,C2)', '(P2,C1)', '(P5,C3)']
+  (-) : ['(P1,C1)', '(P2,C3)', '(P5,C2)']
+  δ   = 0
+  Arête retirée : ['(P5,C2)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 5
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1   100     0         100
+  P2   100           0   100
+  P3   100               100
+  P4         100         100
+  P5               100   100
+  P6   100               100
+  P7         100         100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 6300
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=-21   u4=-18   u5=-19   u6=-25   u7=-16
+  Potentiels colonnes: v1=30   v2=20   v3=22
+
+  ui\vj  C1(30)  C2(20)  C3(22)
+─────────────────────────
+  P1(0)    30    20    22
+P2(-20)    10     0     2
+P3(-21)     9    -1     1
+P4(-18)    12     2     4
+P5(-19)    11     1     3
+P6(-25)     5    -5    -3
+P7(-16)    14     4     6
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1   ---   ---  [-7]
+  P2   ---    50   ---
+  P3   ---    11    29
+  P4    -6   ---    25
+  P5    39    39   ---
+  P6   ---    43    30
+  P7    36   ---    16
+
+  Arête améliorante détectée : (P1, C3)   [coût marginal = -7]
+
+  Ajout de (P1,C3) dans la base
+  Cycle : (P1,C3) → (P1,C1) → (P2,C1) → (P2,C3) → (P1,C3)
+  (+) : ['(P1,C3)', '(P2,C1)']
+  (-) : ['(P1,C1)', '(P2,C3)']
+  δ   = 0
+  Arête retirée : ['(P2,C3)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 6
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1   100     0     0   100
+  P2   100               100
+  P3   100               100
+  P4         100         100
+  P5               100   100
+  P6   100               100
+  P7         100         100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 6300
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=-21   u4=-18   u5=-12   u6=-25   u7=-16
+  Potentiels colonnes: v1=30   v2=20   v3=15
+
+  ui\vj  C1(30)  C2(20)  C3(15)
+─────────────────────────
+  P1(0)    30    20    15
+P2(-20)    10     0    -5
+P3(-21)     9    -1    -6
+P4(-18)    12     2    -3
+P5(-12)    18     8     3
+P6(-25)     5    -5   -10
+P7(-16)    14     4    -1
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1   ---   ---   ---
+  P2   ---    50     7
+  P3   ---    11    36
+  P4  [-6]   ---    32
+  P5    32    32   ---
+  P6   ---    43    37
+  P7    36   ---    23
+
+  Arête améliorante détectée : (P4, C1)   [coût marginal = -6]
+
+  Ajout de (P4,C1) dans la base
+  Cycle : (P4,C1) → (P4,C2) → (P1,C2) → (P1,C1) → (P4,C1)
+  (+) : ['(P4,C1)', '(P1,C2)']
+  (-) : ['(P4,C2)', '(P1,C1)']
+  δ   = 100
+  Arête retirée : ['(P1,C1)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 7
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1         100     0   100
+  P2   100               100
+  P3   100               100
+  P4   100     0         100
+  P5               100   100
+  P6   100               100
+  P7         100         100
+────────────────────────────
+  Cj   400   200   100
+
+  Coût total : 5700
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-14   u3=-15   u4=-18   u5=-12   u6=-19   u7=-16
+  Potentiels colonnes: v1=24   v2=20   v3=15
+
+  ui\vj  C1(24)  C2(20)  C3(15)
+─────────────────────────
+  P1(0)    24    20    15
+P2(-14)    10     6     1
+P3(-15)     9     5     0
+P4(-18)     6     2    -3
+P5(-12)    12     8     3
+P6(-19)     5     1    -4
+P7(-16)     8     4    -1
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1     6   ---   ---
+  P2   ---    44     1
+  P3   ---     5    30
+  P4   ---   ---    32
+  P5    38    32   ---
+  P6   ---    37    31
+  P7    42   ---    23
+
+  ✅  Solution OPTIMALE  –  Coût = 5700

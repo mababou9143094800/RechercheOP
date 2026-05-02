@@ -1,0 +1,73 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem2.txt
+  Algorithme initial : Nord-Ouest
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    Pi
+──────────────────────
+  P1    10    20   100
+  P2    30    10   100
+──────────────────────
+  Cj   100   100
+
+
+══ MÉTHODE NORD-OUEST ══
+  Alloc     100 → (P1, C1)    [P1 restant=0,  C1 restant=0]
+  ⚠ Dégénérescence : P1 et C1 épuisés simultanément
+  Alloc     100 → (P2, C2)    [P2 restant=0,  C2 restant=0]
+
+  → 2 cellules de base  (requis : 3)
+  ⚠ Solution dégénérée : 1 cellule(s) manquante(s)
+
+╔══ PROPOSITION INITIALE (Nord-Ouest) ══╗
+        C1    C2    Pi
+──────────────────────
+  P1   100         100
+  P2         100   100
+──────────────────────
+  Cj   100   100
+
+  Coût total : 2000
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ Proposition dégénérée avant correction : 2/3 cellules de base
+
+  [Correction du graphe de transport]
+
+  [Connexité]  2 composantes : {P1, C1}  |  {P2, C2}
+  → Arête ajoutée (alloc=0) : (P1,C2)  coût=20
+
+  Proposition non-dégénérée : 3/3 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    Pi
+──────────────────────
+  P1   100     0   100
+  P2         100   100
+──────────────────────
+  Cj   100   100
+
+  Coût total : 2000
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-10
+  Potentiels colonnes: v1=10   v2=20
+
+  ui\vj  C1(10)  C2(20)
+───────────────────
+  P1(0)    10    20
+P2(-10)     0    10
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2
+────────────────
+  P1   ---   ---
+  P2    30   ---
+
+  ✅  Solution OPTIMALE  –  Coût = 2000

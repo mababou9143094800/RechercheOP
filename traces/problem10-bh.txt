@@ -1,0 +1,172 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem10.txt
+  Algorithme initial : Balas-Hammer
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+          C1     C2     C3     C4     C5     C6     C7     Pi
+─────────────────────────────────────────────────────────────
+   P1    300     20     15     16     17     18     20    500
+   P2      1     50     24     30     22     27     19    500
+   P3     50     40     30      3     25     26      3   2500
+─────────────────────────────────────────────────────────────
+   Cj    500    500    500    500    500    500    500
+
+
+══ MÉTHODE BALAS-HAMMER ══
+
+  ── Étape 1 ──
+  Pén. lignes   : P1=1   P2=18   P3=0
+  Pén. colonnes : C1=49   C2=20   C3=9   C4=13   C5=5   C6=8   C7=16
+  Pénalité max = 49  →  colonnes ['C1']
+  Choix colonne C1  → cellule min : (P2, C1)  coût=1
+  Alloc     500 → (P2, C1)    [P2 restant=0,  C1 restant=0]
+  ⚠ Dégénérescence : P2 et C1 épuisés simultanément
+
+  ── Étape 2 ──
+  Pén. lignes   : P1=1   P3=0
+  Pén. colonnes : C2=20   C3=15   C4=13   C5=8   C6=8   C7=17
+  Pénalité max = 20  →  colonnes ['C2']
+  Choix colonne C2  → cellule min : (P1, C2)  coût=20
+  Alloc     500 → (P1, C2)    [P1 restant=0,  C2 restant=0]
+  ⚠ Dégénérescence : P1 et C2 épuisés simultanément
+
+  ── Étape 3 ──
+  Pén. lignes   : P3=0
+  Pén. colonnes : C3=30   C4=3   C5=25   C6=26   C7=3
+  Pénalité max = 30  →  colonnes ['C3']
+  Choix colonne C3  → cellule min : (P3, C3)  coût=30
+  Alloc     500 → (P3, C3)    [P3 restant=2000,  C3 restant=0]
+
+  ── Étape 4 ──
+  Pén. lignes   : P3=0
+  Pén. colonnes : C4=3   C5=25   C6=26   C7=3
+  Pénalité max = 26  →  colonnes ['C6']
+  Choix colonne C6  → cellule min : (P3, C6)  coût=26
+  Alloc     500 → (P3, C6)    [P3 restant=1500,  C6 restant=0]
+
+  ── Étape 5 ──
+  Pén. lignes   : P3=0
+  Pén. colonnes : C4=3   C5=25   C7=3
+  Pénalité max = 25  →  colonnes ['C5']
+  Choix colonne C5  → cellule min : (P3, C5)  coût=25
+  Alloc     500 → (P3, C5)    [P3 restant=1000,  C5 restant=0]
+
+  ── Étape 6 ──
+  Pén. lignes   : P3=0
+  Pén. colonnes : C4=3   C7=3
+  Pénalité max = 3  →  colonnes ['C4', 'C7']
+  Choix colonne C4  → cellule min : (P3, C4)  coût=3
+  Alloc     500 → (P3, C4)    [P3 restant=500,  C4 restant=0]
+
+  ── Étape 7 ──
+  Pén. lignes   : P3=3
+  Pén. colonnes : C7=3
+  Pénalité max = 3  →  lignes ['P3']  +  colonnes ['C7']
+  Choix ligne P3  → cellule min : (P3, C7)  coût=3
+  Alloc     500 → (P3, C7)    [P3 restant=0,  C7 restant=0]
+
+  → 7 cellules de base  (requis : 9)
+  ⚠ Solution dégénérée : 2 cellule(s) manquante(s)
+
+╔══ PROPOSITION INITIALE (Balas-Hammer) ══╗
+          C1     C2     C3     C4     C5     C6     C7     Pi
+─────────────────────────────────────────────────────────────
+   P1           500                                       500
+   P2    500                                              500
+   P3                  500    500    500    500    500   2500
+─────────────────────────────────────────────────────────────
+   Cj    500    500    500    500    500    500    500
+
+  Coût total : 54000
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ Proposition dégénérée avant correction : 7/9 cellules de base
+
+  [Correction du graphe de transport]
+
+  [Connexité]  3 composantes : {P1, C2}  |  {P2, C1}  |  {P3, C3, C4, C5, C6, C7}
+  → Arête ajoutée (alloc=0) : (P1,C3)  coût=15
+
+  [Connexité]  2 composantes : {P1, P3, C2, C3, C4, C5, C6, C7}  |  {P2, C1}
+  → Arête ajoutée (alloc=0) : (P2,C7)  coût=19
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+          C1     C2     C3     C4     C5     C6     C7     Pi
+─────────────────────────────────────────────────────────────
+   P1           500      0                                500
+   P2    500                                         0    500
+   P3                  500    500    500    500    500   2500
+─────────────────────────────────────────────────────────────
+   Cj    500    500    500    500    500    500    500
+
+  Coût total : 54000
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=31   u3=15
+  Potentiels colonnes: v1=-30   v2=20   v3=15   v4=-12   v5=10   v6=11   v7=-12
+
+   ui\vj  C1(-30)  C2(20)  C3(15)  C4(-12)  C5(10)  C6(11)  C7(-12)
+──────────────────────────────────────────────────
+   P1(0)   -30    20    15   -12    10    11   -12
+  P2(31)     1    51    46    19    41    42    19
+  P3(15)   -15    35    30     3    25    26     3
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3    C4    C5    C6    C7
+──────────────────────────────────────────────
+  P1   330   ---   ---    28     7     7    32
+  P2   ---    -1  [-22]    11   -19   -15   ---
+  P3    65     5   ---   ---   ---   ---   ---
+
+  Arête améliorante détectée : (P2, C3)   [coût marginal = -22]
+
+  Ajout de (P2,C3) dans la base
+  Cycle : (P2,C3) → (P2,C7) → (P3,C7) → (P3,C3) → (P2,C3)
+  (+) : ['(P2,C3)', '(P3,C7)']
+  (-) : ['(P2,C7)', '(P3,C3)']
+  δ   = 0
+  Arête retirée : ['(P2,C7)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 9/9 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+          C1     C2     C3     C4     C5     C6     C7     Pi
+─────────────────────────────────────────────────────────────
+   P1           500      0                                500
+   P2    500             0                                500
+   P3                  500    500    500    500    500   2500
+─────────────────────────────────────────────────────────────
+   Cj    500    500    500    500    500    500    500
+
+  Coût total : 54000
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=9   u3=15
+  Potentiels colonnes: v1=-8   v2=20   v3=15   v4=-12   v5=10   v6=11   v7=-12
+
+   ui\vj  C1(-8)  C2(20)  C3(15)  C4(-12)  C5(10)  C6(11)  C7(-12)
+──────────────────────────────────────────────────
+   P1(0)    -8    20    15   -12    10    11   -12
+   P2(9)     1    29    24    -3    19    20    -3
+  P3(15)     7    35    30     3    25    26     3
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3    C4    C5    C6    C7
+──────────────────────────────────────────────
+  P1   308   ---   ---    28     7     7    32
+  P2   ---    21   ---    33     3     7    22
+  P3    43     5   ---   ---   ---   ---   ---
+
+  ✅  Solution OPTIMALE  –  Coût = 54000

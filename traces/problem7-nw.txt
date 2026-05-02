@@ -1,0 +1,131 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem7.txt
+  Algorithme initial : Nord-Ouest
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    Pi
+──────────────────────
+  P1    50    20   100
+  P2    10    50   200
+  P3    50    40   100
+  P4    45    35   200
+──────────────────────
+  Cj   300   300
+
+
+══ MÉTHODE NORD-OUEST ══
+  Alloc     100 → (P1, C1)    [P1 restant=0,  C1 restant=200]
+  Alloc     200 → (P2, C1)    [P2 restant=0,  C1 restant=0]
+  ⚠ Dégénérescence : P2 et C1 épuisés simultanément
+  Alloc     100 → (P3, C2)    [P3 restant=0,  C2 restant=200]
+  Alloc     200 → (P4, C2)    [P4 restant=0,  C2 restant=0]
+
+  → 4 cellules de base  (requis : 5)
+  ⚠ Solution dégénérée : 1 cellule(s) manquante(s)
+
+╔══ PROPOSITION INITIALE (Nord-Ouest) ══╗
+        C1    C2    Pi
+──────────────────────
+  P1   100         100
+  P2   200         200
+  P3         100   100
+  P4         200   200
+──────────────────────
+  Cj   300   300
+
+  Coût total : 18000
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ Proposition dégénérée avant correction : 4/5 cellules de base
+
+  [Correction du graphe de transport]
+
+  [Connexité]  2 composantes : {P1, P2, C1}  |  {P3, P4, C2}
+  → Arête ajoutée (alloc=0) : (P1,C2)  coût=20
+
+  Proposition non-dégénérée : 5/5 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    Pi
+──────────────────────
+  P1   100     0   100
+  P2   200         200
+  P3         100   100
+  P4         200   200
+──────────────────────
+  Cj   300   300
+
+  Coût total : 18000
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-40   u3=20   u4=15
+  Potentiels colonnes: v1=50   v2=20
+
+  ui\vj  C1(50)  C2(20)
+───────────────────
+  P1(0)    50    20
+P2(-40)    10   -20
+ P3(20)    70    40
+ P4(15)    65    35
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2
+────────────────
+  P1   ---   ---
+  P2   ---    70
+  P3  [-20]   ---
+  P4   -20   ---
+
+  Arête améliorante détectée : (P3, C1)   [coût marginal = -20]
+
+  Ajout de (P3,C1) dans la base
+  Cycle : (P3,C1) → (P3,C2) → (P1,C2) → (P1,C1) → (P3,C1)
+  (+) : ['(P3,C1)', '(P1,C2)']
+  (-) : ['(P3,C2)', '(P1,C1)']
+  δ   = 100
+  Arête retirée : ['(P1,C1)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 5/5 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    Pi
+──────────────────────
+  P1         100   100
+  P2   200         200
+  P3   100     0   100
+  P4         200   200
+──────────────────────
+  Cj   300   300
+
+  Coût total : 16000
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=-20   u3=20   u4=15
+  Potentiels colonnes: v1=30   v2=20
+
+  ui\vj  C1(30)  C2(20)
+───────────────────
+  P1(0)    30    20
+P2(-20)    10     0
+ P3(20)    50    40
+ P4(15)    45    35
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2
+────────────────
+  P1    20   ---
+  P2   ---    50
+  P3   ---   ---
+  P4     0   ---
+
+  ✅  Solution OPTIMALE  –  Coût = 16000

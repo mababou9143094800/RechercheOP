@@ -1,0 +1,102 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem5.txt
+  Algorithme initial : Balas-Hammer
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1     5     7     8    25
+  P2     6     8     5    25
+  P3     6     7     7    25
+────────────────────────────
+  Cj    35    20    20
+
+
+══ MÉTHODE BALAS-HAMMER ══
+
+  ── Étape 1 ──
+  Pén. lignes   : P1=2   P2=1   P3=1
+  Pén. colonnes : C1=1   C2=0   C3=2
+  Pénalité max = 2  →  lignes ['P1']  +  colonnes ['C3']
+  Choix ligne P1  → cellule min : (P1, C1)  coût=5
+  Alloc      25 → (P1, C1)    [P1 restant=0,  C1 restant=10]
+
+  ── Étape 2 ──
+  Pén. lignes   : P2=1   P3=1
+  Pén. colonnes : C1=0   C2=1   C3=2
+  Pénalité max = 2  →  colonnes ['C3']
+  Choix colonne C3  → cellule min : (P2, C3)  coût=5
+  Alloc      20 → (P2, C3)    [P2 restant=5,  C3 restant=0]
+
+  ── Étape 3 ──
+  Pén. lignes   : P2=2   P3=1
+  Pén. colonnes : C1=0   C2=1
+  Pénalité max = 2  →  lignes ['P2']
+  Choix ligne P2  → cellule min : (P2, C1)  coût=6
+  Alloc       5 → (P2, C1)    [P2 restant=0,  C1 restant=5]
+
+  ── Étape 4 ──
+  Pén. lignes   : P3=1
+  Pén. colonnes : C1=6   C2=7
+  Pénalité max = 7  →  colonnes ['C2']
+  Choix colonne C2  → cellule min : (P3, C2)  coût=7
+  Alloc      20 → (P3, C2)    [P3 restant=5,  C2 restant=0]
+
+  ── Étape 5 ──
+  Pén. lignes   : P3=6
+  Pén. colonnes : C1=6
+  Pénalité max = 6  →  lignes ['P3']  +  colonnes ['C1']
+  Choix ligne P3  → cellule min : (P3, C1)  coût=6
+  Alloc       5 → (P3, C1)    [P3 restant=0,  C1 restant=0]
+
+  → 5 cellules de base  (requis : 5)
+
+╔══ PROPOSITION INITIALE (Balas-Hammer) ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1    25                25
+  P2     5          20    25
+  P3     5    20          25
+────────────────────────────
+  Cj    35    20    20
+
+  Coût total : 425
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 5/5 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    Pi
+────────────────────────────
+  P1    25                25
+  P2     5          20    25
+  P3     5    20          25
+────────────────────────────
+  Cj    35    20    20
+
+  Coût total : 425
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=1   u3=1
+  Potentiels colonnes: v1=5   v2=6   v3=4
+
+ ui\vj  C1(5)  C2(6)  C3(4)
+────────────────────────
+ P1(0)     5     6     4
+ P2(1)     6     7     5
+ P3(1)     6     7     5
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3
+──────────────────────
+  P1   ---     1     4
+  P2   ---     1   ---
+  P3   ---   ---     2
+
+  ✅  Solution OPTIMALE  –  Coût = 425

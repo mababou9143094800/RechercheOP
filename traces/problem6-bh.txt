@@ -1,0 +1,195 @@
+╔══════════════════════════════════════════════════════════════╗
+  RÉSOLUTION  –  problem6.txt
+  Algorithme initial : Balas-Hammer
+╚══════════════════════════════════════════════════════════════╝
+
+
+╔══ MATRICE DES COÛTS ══╗
+        C1    C2    C3    C4    Pi
+──────────────────────────────────
+  P1    11    12    10    10    60
+  P2    17    16    15    18    30
+  P3    19    21    20    22    90
+──────────────────────────────────
+  Cj    50    75    30    25
+
+
+══ MÉTHODE BALAS-HAMMER ══
+
+  ── Étape 1 ──
+  Pén. lignes   : P1=0   P2=1   P3=1
+  Pén. colonnes : C1=6   C2=4   C3=5   C4=8
+  Pénalité max = 8  →  colonnes ['C4']
+  Choix colonne C4  → cellule min : (P1, C4)  coût=10
+  Alloc      25 → (P1, C4)    [P1 restant=35,  C4 restant=0]
+
+  ── Étape 2 ──
+  Pén. lignes   : P1=1   P2=1   P3=1
+  Pén. colonnes : C1=6   C2=4   C3=5
+  Pénalité max = 6  →  colonnes ['C1']
+  Choix colonne C1  → cellule min : (P1, C1)  coût=11
+  Alloc      35 → (P1, C1)    [P1 restant=0,  C1 restant=15]
+
+  ── Étape 3 ──
+  Pén. lignes   : P2=1   P3=1
+  Pén. colonnes : C1=2   C2=5   C3=5
+  Pénalité max = 5  →  colonnes ['C2', 'C3']
+  Choix colonne C2  → cellule min : (P2, C2)  coût=16
+  Alloc      30 → (P2, C2)    [P2 restant=0,  C2 restant=45]
+
+  ── Étape 4 ──
+  Pén. lignes   : P3=1
+  Pén. colonnes : C1=19   C2=21   C3=20
+  Pénalité max = 21  →  colonnes ['C2']
+  Choix colonne C2  → cellule min : (P3, C2)  coût=21
+  Alloc      45 → (P3, C2)    [P3 restant=45,  C2 restant=0]
+
+  ── Étape 5 ──
+  Pén. lignes   : P3=1
+  Pén. colonnes : C1=19   C3=20
+  Pénalité max = 20  →  colonnes ['C3']
+  Choix colonne C3  → cellule min : (P3, C3)  coût=20
+  Alloc      30 → (P3, C3)    [P3 restant=15,  C3 restant=0]
+
+  ── Étape 6 ──
+  Pén. lignes   : P3=19
+  Pén. colonnes : C1=19
+  Pénalité max = 19  →  lignes ['P3']  +  colonnes ['C1']
+  Choix ligne P3  → cellule min : (P3, C1)  coût=19
+  Alloc      15 → (P3, C1)    [P3 restant=0,  C1 restant=0]
+
+  → 6 cellules de base  (requis : 6)
+
+╔══ PROPOSITION INITIALE (Balas-Hammer) ══╗
+        C1    C2    C3    C4    Pi
+──────────────────────────────────
+  P1    35                25    60
+  P2          30                30
+  P3    15    45    30          90
+──────────────────────────────────
+  Cj    50    75    30    25
+
+  Coût total : 2945
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 6/6 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    C4    Pi
+──────────────────────────────────
+  P1    35                25    60
+  P2          30                30
+  P3    15    45    30          90
+──────────────────────────────────
+  Cj    50    75    30    25
+
+  Coût total : 2945
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=3   u3=8
+  Potentiels colonnes: v1=11   v2=13   v3=12   v4=10
+
+  ui\vj  C1(11)  C2(13)  C3(12)  C4(10)
+───────────────────────────────
+  P1(0)    11    13    12    10
+  P2(3)    14    16    15    13
+  P3(8)    19    21    20    18
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3    C4
+────────────────────────────
+  P1   ---    -1  [-2]   ---
+  P2     3   ---     0     5
+  P3   ---   ---   ---     4
+
+  Arête améliorante détectée : (P1, C3)   [coût marginal = -2]
+
+  Ajout de (P1,C3) dans la base
+  Cycle : (P1,C3) → (P1,C1) → (P3,C1) → (P3,C3) → (P1,C3)
+  (+) : ['(P1,C3)', '(P3,C1)']
+  (-) : ['(P1,C1)', '(P3,C3)']
+  δ   = 30
+  Arête retirée : ['(P3,C3)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 6/6 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    C4    Pi
+──────────────────────────────────
+  P1     5          30    25    60
+  P2          30                30
+  P3    45    45                90
+──────────────────────────────────
+  Cj    50    75    30    25
+
+  Coût total : 2885
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=3   u3=8
+  Potentiels colonnes: v1=11   v2=13   v3=10   v4=10
+
+  ui\vj  C1(11)  C2(13)  C3(10)  C4(10)
+───────────────────────────────
+  P1(0)    11    13    10    10
+  P2(3)    14    16    13    13
+  P3(8)    19    21    18    18
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3    C4
+────────────────────────────
+  P1   ---  [-1]   ---   ---
+  P2     3   ---     2     5
+  P3   ---   ---     2     4
+
+  Arête améliorante détectée : (P1, C2)   [coût marginal = -1]
+
+  Ajout de (P1,C2) dans la base
+  Cycle : (P1,C2) → (P1,C1) → (P3,C1) → (P3,C2) → (P1,C2)
+  (+) : ['(P1,C2)', '(P3,C1)']
+  (-) : ['(P1,C1)', '(P3,C2)']
+  δ   = 5
+  Arête retirée : ['(P1,C1)']
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ITÉRATION 3
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Proposition non-dégénérée : 6/6 cellules ✓
+
+╔══ PROPOSITION DE TRANSPORT ══╗
+        C1    C2    C3    C4    Pi
+──────────────────────────────────
+  P1           5    30    25    60
+  P2          30                30
+  P3    50    40                90
+──────────────────────────────────
+  Cj    50    75    30    25
+
+  Coût total : 2880
+
+╔══ TABLE DES COÛTS POTENTIELS  (ui + vj) ══╗
+  Potentiels lignes  : u1=0   u2=4   u3=9
+  Potentiels colonnes: v1=10   v2=12   v3=10   v4=10
+
+  ui\vj  C1(10)  C2(12)  C3(10)  C4(10)
+───────────────────────────────
+  P1(0)    10    12    10    10
+  P2(4)    14    16    14    14
+  P3(9)    19    21    19    19
+
+╔══ TABLE DES COÛTS MARGINAUX  (aij − ui − vj) ══╗
+        C1    C2    C3    C4
+────────────────────────────
+  P1     1   ---   ---   ---
+  P2     3   ---     1     4
+  P3   ---   ---     1     3
+
+  ✅  Solution OPTIMALE  –  Coût = 2880
